@@ -12,42 +12,24 @@ password VARCHAR(18),
 frequency INT(10)
 );
 
-CREATE TABLE delivery(
-driver_id INT(12) NOT NULL PRIMARY KEY,
-vehicle_no INT(12),
-vehicle_type VARCHAR(20)
+CREATE TABLE driver(
+full_name VARCHAR(200),
+vehicle_no VARCHAR(200),
+license_no VARCHAR(200) NOT NULL PRIMARY KEY,
+mobile VARCHAR(200),
+address VARCHAR(200),
 );
 
-CREATE TABLE pre_order(
+CREATE TABLE order(
 id INT(10) NOT NULL PRIMARY KEY,
-customer_id INT(10),
+customer_email INT(10),
 product_capacity INT(10),
 delivery_date DATE,
 pickup_date DATE,
 state VARCHAR(10),
-CONSTRAINT fk FOREIGN KEY (customer_id) REFERENCES customer(id)
-);
-
-CREATE TABLE product_detail(
-customer_id INT(10),
-order_id INT(10),
-frequency INT(10),
-CONSTRAINT fk_1 FOREIGN KEY (customer_id) REFERENCES customer(id),
-CONSTRAINT fk_2 FOREIGN KEY (order_id) REFERENCES pre_order(id),
-
-CONSTRAINT pk PRIMARY KEY (customer_id,order_id)
-);
-
-
-
-CREATE TABLE order_history(
-id INT(10) NOT NULL PRIMARY KEY,
-customer_id INT(10),
-product_capacity INT(10),
-amount INT(10),
-CONSTRAINT fk_c FOREIGN KEY (customer_id) REFERENCES customer(id)
-
+license_no VARCHAR(50),
+CONSTRAINT fk FOREIGN KEY (customer_email) REFERENCES customer(email),
+CONSTRAINT fk2 FOREIGN KEY (license_no) REFERENCES delivery(license_no)
 
 );
-
 

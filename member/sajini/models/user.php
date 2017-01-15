@@ -30,27 +30,27 @@ Class User extends CI_Model
       'password' => md5($this -> input ->post('password'))
             
             );
-
     $insert = $this -> db -> insert('customer', $data);
     return $insert;
  }
 
- /*function updateprofile($username){
- $where = "email = '$username'";
-  $this-> db -> where($where);
-  $this -> db -> get('customer');
+ function updateprofile($username){
+    
     $data = array(
-        'name' => $name,
-        'address' => $address,
-        'district' => $district,
-        'contact_no' => $contact_no
-);
+      'name' => $this -> input ->post('name'),
+      'address' => $this -> input ->post('address'),
+      'district' => $this -> input ->post('district'),
+      'contact_no' => $this -> input ->post('contact_no'),
+        'imgurl' => $this -> input ->post('imgurl'),
+      'password' => md5($this -> input ->post('password'))
 
-$this-> db ->where('email', $email);
-$this-> db ->update('customer', $data);
+    );
+
+    $this-> db ->where('email', $username);
+    $this-> db ->update('customer', $data);
 
     
- }*/
+ }
  function getOne($username){
     $query=$this->db->query("SELECT * FROM customer WHERE email = '$username'");
     return $query->result();

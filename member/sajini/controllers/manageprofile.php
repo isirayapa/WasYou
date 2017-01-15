@@ -5,17 +5,15 @@ class Manageprofile extends CI_Controller{
 		parent::__construct();
 		$this -> load -> helper(array('form','url'));
 		$this -> load-> library(array('form_validation','googlemaps'));
-		// $this->load->library('googlemaps');
 		$this-> load-> database();
-		$this ->load ->driver('session');
+		$this -> load->driver('session');
 		
 
 	}
 
 	function index(){
-		// $this -> getValues();
+		
 		$this->form_validation->set_rules('contact_no', 'contact_no', 'required|regex_match[/^[0-9]{10}$/]');
-		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 		
 		//google map
@@ -35,39 +33,64 @@ class Manageprofile extends CI_Controller{
 			$email = $this -> session ->userdata('email');
 			
 			$data['results'] = $this -> user ->getOne($email);
-			// $this -> load-> view('manageprofile_view',$data);
-			// $this -> load ->model('user');
-			// $this ->user-> updateprofile();
-			// $this -> load -> view('manageprofile_view');
+		
 			$this -> load-> view('manageprofile_view',$data);
 
 
 		}
-		
-		
-
-		
 	}
+	function editProfille(){
+		$this->form_validation->set_rules('contact_no', 'contact_no', 'required|regex_match[/^[0-9]{10}$/]');
+		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		$this->form_validation->set_rules('password', 'Password', 'required');
+		$this->form_validation->set_rules('confirmpassword', 'Confirm Password', 'required|matches[password]');
+///////////imageupload
+		if(isset($_FILES['image']) && !empty($_FILES['image']['name'])){
+            $pic = rand(1000,100000)."-".$_FILES['image']['name'];
+            $pic_loc = $_FILES['image']['tmp_name'];
 
+            $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+            $allowed =  array('gif','png' ,'jpg','jpeg');
+            if(!in_array($ext,$allowed) ) {
+                echo " <script>alert('Only png, jpg, gif are allowed');</script>";
+                return false;
+            }else{
+                $folder= "uploads/";
+                if(move_uploaded_file($pic_loc,$folder.$pic))
+                {
+                    $imgurl = $folder.$pic;
+                    //echo " <script>alert('successfully uploaded:$imgurl');</script>";
+                }
+                else
+                {
+                     return false;
+                    echo " <script>alert('error while uploading file');</script>";
+                } 
+            }
+            
+        }
+        /////////////////////////////imageupload
+
+		if ($this->form_validation->run() == FALSE) {
+			$this->index();
+		}
+		else{
+			$this -> load -> model ('user');
+			$email = $this -> session ->userdata('email');
+			$this -> user -> updateprofile($email);
+			$this->index();
+		}
+	}
+		
+		
+
+		
 	
-		// function getValues(){
-		// 	if($this-> session ->has_userdata('email')){
-		// 		// $this -> session ->userdata('name');
-		// 		// $this -> session ->userdata('email');
-		// 		// $this -> session ->userdata('contact_no');
-		// 		// $this -> session ->userdata('address');
-		// 		// $this -> session ->userdata('district');
 
-		// 		$this -> load ->model('user');
-		// 		$email = $this -> session ->userdata('email');
-		// 		$data['results'] = $this -> user ->getOne($email);
-		// 		$this -> load-> view('manageprofile_view',$data);
-		// 	}
-			/*$this -> load ->model('user');
-			$this ->user-> updateprofile('email');
-			$this -> load -> view('manageprofile_view');
+
+
+
 			
-		 }*/
 		
 		
 
